@@ -1,42 +1,26 @@
 import React from 'react';
 
-function FilterBar({ selectedType, setSelectedType }) {
-  const categories = [
-    { id: 'all', label: 'All Services', icon: '🚨' },
-    { id: 'hospital', label: 'Hospitals', icon: '🏥' },
-    { id: 'police', label: 'Police', icon: '👮' },
-    { id: 'fire', label: 'Fire Response', icon: '🚒' }
-  ];
+const categories = [
+  { id: 'all', label: 'All services', color: '#1B2333' },
+  { id: 'hospital', label: 'Hospitals', color: '#12A594' },
+  { id: 'police', label: 'Police', color: '#2F6FED' },
+  { id: 'fire', label: 'Fire response', color: '#F2994A' },
+];
 
+function FilterBar({ selectedType, setSelectedType }) {
   return (
-    <div style={{ 
-      display: 'flex', 
-      gap: '12px', 
-      marginBottom: '20px', 
-      justifyContent: 'center',
-      flexWrap: 'wrap' 
-    }}>
+    <div className="filter-bar" role="tablist" aria-label="Filter by service type">
       {categories.map((cat) => (
         <button
           key={cat.id}
+          role="tab"
+          aria-selected={selectedType === cat.id}
+          className={`filter-pill ${selectedType === cat.id ? 'is-active' : ''}`}
+          style={{ '--pill-color': cat.color }}
           onClick={() => setSelectedType(cat.id)}
-          style={{
-            padding: '10px 18px',
-            borderRadius: '25px',
-            border: 'none',
-            backgroundColor: selectedType === cat.id ? '#d9534f' : '#f5f5f5',
-            color: selectedType === cat.id ? '#fff' : '#333',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}
         >
-          <span>{cat.icon}</span>
-          <span>{cat.label}</span>
+          <span className="pill-dot" aria-hidden="true" />
+          {cat.label}
         </button>
       ))}
     </div>

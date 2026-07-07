@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+:root {
+  --ink: #10192B;
+  --paper: #F5F6F8;
+  --card: #FFFFFF;
+  --border: #E3E6EB;
+  --text: #1B2333;
+  --muted: #5B6472;
+  --alert: #E33D30;
+  --hospital: #12A594;
+  --police: #2F6FED;
+  --fire: #F2994A;
+  --live: #22C55E;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+/* Header */
+.app-header {
+  background: var(--ink);
+  color: #fff;
+  padding: 20px 32px;
+}
+
+.header-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  font-size: 2rem;
+  color: var(--alert);
+}
+
+.brand h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.brand p {
+  margin: 2px 0 0;
+  color: #B7BFCC;
+  font-size: 0.9rem;
+}
+
+.status-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--live);
+  animation: pulse 1.8s infinite;
+}
+
+.status-divider {
+  color: #4B5468;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+main {
+  flex: 1;
+  display: flex;
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 24px 32px;
+}
+
+.map-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.app-footer {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.search-box {
+  position: relative;
+  max-width: 480px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  background: var(--card);
+  font-family: 'Inter', sans-serif;
+}
+
+.search-box input:focus {
+  outline: 2px solid var(--police);
+  outline-offset: 1px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+}
+
+.clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font: 600 13px/1 'Inter', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill .pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pill-color);
+}
+
+.filter-pill:hover {
+  border-color: var(--pill-color);
+}
+
+.filter-pill.is-active {
+  background: var(--pill-color);
+  border-color: var(--pill-color);
+  color: #fff;
+}
+
+.filter-pill.is-active .pill-dot {
+  background: #fff;
+}
+
+/* Workspace: results list + map */
+.workspace {
+  display: flex;
+  gap: 20px;
+  flex: 1; /* fill remaining vertical space */
+  min-height: 0; /* allow children to use flex sizing */
+}
+
+.results-panel {
+  width: 340px;
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0; /* allow internal scrolling */
+}
+
+/* Ensure results panel matches the map height on larger screens */
+@media (min-width: 880px) {
+  .results-panel {
+    height: calc(100vh - 220px);
+  }
+
+  .map-frame {
+    min-height: calc(100vh - 220px);
+  }
+}
+
+.results-count {
+  padding: 12px 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.results-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.result-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.result-item:hover {
+  background: #F9FAFB;
+}
+
+.result-item.is-active {
+  background: #EEF3FF;
+}
+
+.result-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.result-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.result-address {
+  margin: 4px 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.result-status {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--alert);
+}
+
+.result-status.is-open {
+  color: #189B6C;
+}
+
+.empty-state {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.empty-state button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+}
+
+.map-frame {
+  flex: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(16, 25, 43, 0.12);
+  min-height: 0; /* ensure children can stretch to full height */
+  /* Default: use viewport-based height so map is visible across screen sizes */
+  height: calc(100vh - 220px);
+}
+
+/* Ensure the leaflet map fills the map-frame */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0;
+}
+
+/* Custom Leaflet markers */
+.marker-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.marker-glyph {
+  display: inline-block;
+  transform: rotate(45deg);
+  font-size: 14px;
+}
+
+/* Popup */
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+}
+
+.popup-card h3 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.popup-card p {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+}
+
+.popup-open {
+  color: #189B6C;
+  font-weight: 600;
+}
+
+.popup-hours {
+  color: var(--alert);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 880px) {
+  .workspace {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .map-frame {
+    height: 360px;
+  }
+
+  .results-panel {
+    width: 100%;
+    height: 320px;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

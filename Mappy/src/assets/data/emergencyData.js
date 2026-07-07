@@ -1,32 +1,347 @@
-export const emergencyServices = [
+// Western Cape sample services (hospitals, police stations, fire stations)
+// Covers Cape Town metro and surrounding towns across the Western Cape province
+const westernCapeServices = [
+  // Cape Town metro
   {
-    id: 1,
-    name: "City Central Public Hospital",
-    type: "hospital",
-    lat: -33.9249,
-    lng: 18.4241,
-    phone: "+27 21 555 0199",
-    address: "123 Health Ave, Foreshore",
-    open247: true
+    name: 'Groote Schuur Hospital',
+    type: 'hospital',
+    lat: -33.9332,
+    lng: 18.4625,
+    phone: '021 404 9111',
+    suburb: 'Observatory',
+    address: 'Observatory Rd, Observatory, Cape Town',
+    open247: true,
   },
   {
-    id: 2,
-    name: "District Central Police Station",
-    type: "police",
-    lat: -33.9321,
-    lng: 18.4230,
-    phone: "+27 21 555 0111",
-    address: "45 Justice Blvd, City Bowl",
-    open247: true
+    name: "Red Cross War Memorial Children's Hospital",
+    type: 'hospital',
+    lat: -33.9447,
+    lng: 18.4660,
+    phone: '021 685 4011',
+    suburb: 'Rondebosch',
+    address: 'Rondebosch Rd, Rondebosch, Cape Town',
+    open247: true,
   },
   {
-    id: 3,
-    name: "Metro Fire & Rescue Station",
-    type: "fire",
-    lat: -33.9185,
-    lng: 18.4198,
-    phone: "+27 21 555 0122",
-    address: "78 Flame Rd, Gardens",
-    open247: true
-  }
+    name: 'Tygerberg Hospital',
+    type: 'hospital',
+    lat: -33.9034,
+    lng: 18.6317,
+    phone: '021 938 4911',
+    suburb: 'Parow',
+    address: 'Tygerberg Rd, Parow Valley, Cape Town',
+    open247: true,
+  },
+
+  // Cape Town police
+  {
+    name: 'Cape Town Central Police Station',
+    type: 'police',
+    lat: -33.9260,
+    lng: 18.4233,
+    phone: '021 467 8000',
+    suburb: 'City Centre',
+    address: '12 Darling St, Cape Town City Centre',
+    open247: true,
+  },
+
+  // False Bay / Southern Peninsula
+  {
+    name: 'Muizenberg Police Station',
+    type: 'police',
+    lat: -34.1049,
+    lng: 18.4740,
+    phone: '021 787 9300',
+    suburb: 'Muizenberg',
+    address: 'Main Rd, Muizenberg',
+    open247: true,
+  },
+  {
+    name: 'Hermanus District Hospital',
+    type: 'hospital',
+    lat: -34.4184,
+    lng: 19.2410,
+    phone: '028 312 6200',
+    suburb: 'Hermanus',
+    address: 'Wickham St, Hermanus',
+    open247: true,
+  },
+
+  // Cape Winelands
+  {
+    name: 'Worcester Hospital',
+    type: 'hospital',
+    lat: -33.6456,
+    lng: 19.4581,
+    phone: '023 346 1200',
+    suburb: 'Worcester',
+    address: 'Carnarvon St, Worcester',
+    open247: true,
+  },
+  {
+    name: 'Stellenbosch Police Station',
+    type: 'police',
+    lat: -33.9340,
+    lng: 18.8600,
+    phone: '021 808 8400',
+    suburb: 'Stellenbosch',
+    address: 'Dorp St, Stellenbosch',
+    open247: true,
+  },
+
+  // Overberg / Helderberg
+  {
+    name: 'Somerset Hospital (Somerset West)',
+    type: 'hospital',
+    lat: -34.0859,
+    lng: 18.7769,
+    phone: '021 819 6000',
+    suburb: 'Somerset West',
+    address: 'Andries Pretorius St, Somerset West',
+    open247: true,
+  },
+
+  // West Coast
+  {
+    name: 'Saldanha Bay Hospital',
+    type: 'hospital',
+    lat: -33.0129,
+    lng: 17.9459,
+    phone: '022 713 7200',
+    suburb: 'Saldanha',
+    address: 'Cnr Main & Market St, Saldanha',
+    open247: true,
+  },
+
+  // Garden Route
+  {
+    name: 'George Hospital',
+    type: 'hospital',
+    lat: -33.9646,
+    lng: 22.4598,
+    phone: '044 801 7000',
+    suburb: 'George',
+    address: 'Disa St, George',
+    open247: true,
+  },
+  {
+    name: 'Knysna Police Station',
+    type: 'police',
+    lat: -34.0365,
+    lng: 23.0488,
+    phone: '044 382 5131',
+    suburb: 'Knysna',
+    address: 'Main Rd, Knysna',
+    open247: true,
+  },
+
+  // Fires / rescue stations across the province
+  {
+    name: 'Goodwood Fire Station',
+    type: 'fire',
+    lat: -33.9041,
+    lng: 18.5549,
+    phone: '021 590 1000',
+    suburb: 'Goodwood',
+    address: 'Voortrekker Rd, Goodwood',
+    open247: true,
+  },
+  {
+    name: 'Kuils River Fire Station',
+    type: 'fire',
+    lat: -33.9196,
+    lng: 18.6764,
+    phone: '021 900 2000',
+    suburb: 'Kuils River',
+    address: 'Cnr Totius & Voortrekker Rd, Kuils River',
+    open247: true,
+  },
+  {
+    name: 'Mossel Bay Fire Station',
+    type: 'fire',
+    lat: -34.1831,
+    lng: 22.1469,
+    phone: '044 691 0000',
+    suburb: 'Mossel Bay',
+    address: 'Church St, Mossel Bay',
+    open247: true,
+  },
+  // Additional Cape Town suburbs
+  {
+    name: 'Sea Point Clinic',
+    type: 'hospital',
+    lat: -33.9126,
+    lng: 18.3924,
+    phone: '021 430 8000',
+    suburb: 'Sea Point',
+    address: 'Main Rd, Sea Point',
+    open247: false,
+  },
+  {
+    name: 'Green Point Police Station',
+    type: 'police',
+    lat: -33.9075,
+    lng: 18.4011,
+    phone: '021 430 9000',
+    suburb: 'Green Point',
+    address: 'Somerset Rd, Green Point',
+    open247: true,
+  },
+  {
+    name: 'Claremont Police Station',
+    type: 'police',
+    lat: -33.9806,
+    lng: 18.4651,
+    phone: '021 657 7400',
+    suburb: 'Claremont',
+    address: 'Buitenkant St, Claremont',
+    open247: true,
+  },
+  {
+    name: 'Karl Bremer Hospital',
+    type: 'hospital',
+    lat: -33.9167,
+    lng: 18.6400,
+    phone: '021 938 6000',
+    suburb: 'Bellville',
+    address: 'Cnr N Park & Voortrekker Rd, Bellville',
+    open247: true,
+  },
+  {
+    name: 'Khayelitsha District Hospital',
+    type: 'hospital',
+    lat: -34.0433,
+    lng: 18.6402,
+    phone: '021 360 3000',
+    suburb: 'Khayelitsha',
+    address: 'Lafarge St, Khayelitsha',
+    open247: true,
+  },
+  {
+    name: 'Mitchells Plain Day Hospital',
+    type: 'hospital',
+    lat: -34.0471,
+    lng: 18.6128,
+    phone: '021 370 2000',
+    suburb: 'Mitchells Plain',
+    address: 'Central Ave, Mitchells Plain',
+    open247: false,
+  },
+  // Gauteng
+  {
+    name: 'Charlotte Maxeke Johannesburg Academic Hospital',
+    type: 'hospital',
+    lat: -26.1950,
+    lng: 28.0456,
+    phone: '011 488 4911',
+    suburb: 'Johannesburg',
+    address: 'Owen St, Parktown, Johannesburg',
+    open247: true,
+  },
+  {
+    name: 'Johannesburg Central Police Station',
+    type: 'police',
+    lat: -26.2041,
+    lng: 28.0473,
+    phone: '010 393 8000',
+    suburb: 'CBD',
+    address: 'Simmonds St, Johannesburg',
+    open247: true,
+  },
+
+  // Pretoria / Tshwane
+  {
+    name: 'Steve Biko Academic Hospital',
+    type: 'hospital',
+    lat: -25.7439,
+    lng: 28.2336,
+    phone: '012 354 1000',
+    suburb: 'Pretoria',
+    address: 'Dr Savage St, Pretoria',
+    open247: true,
+  },
+
+  // KwaZulu-Natal
+  {
+    name: 'Addington Hospital',
+    type: 'hospital',
+    lat: -29.8746,
+    lng: 31.0123,
+    phone: '031 327 2500',
+    suburb: 'Durban',
+    address: 'Oates Rd, Addington, Durban',
+    open247: true,
+  },
+  {
+    name: 'Durban Central Police Station',
+    type: 'police',
+    lat: -29.8587,
+    lng: 31.0218,
+    phone: '031 361 8000',
+    suburb: 'City Centre',
+    address: 'Smith St, Durban',
+    open247: true,
+  },
+
+  // Eastern Cape
+  {
+    name: 'Livingstone Hospital (Port Elizabeth)',
+    type: 'hospital',
+    lat: -33.9618,
+    lng: 25.6140,
+    phone: '041 406 2000',
+    suburb: 'Gqeberha',
+    address: 'Christie Park, Gqeberha',
+    open247: true,
+  },
+
+  // Mpumalanga
+  {
+    name: 'Rob Ferreira Hospital',
+    type: 'hospital',
+    lat: -25.4500,
+    lng: 30.9800,
+    phone: '013 750 1000',
+    suburb: 'Nelspruit',
+    address: 'Kerk St, Nelspruit',
+    open247: true,
+  },
+
+  // Limpopo
+  {
+    name: 'Polokwane-Mankweng Hospital',
+    type: 'hospital',
+    lat: -23.8759,
+    lng: 29.4689,
+    phone: '015 290 3000',
+    suburb: 'Polokwane',
+    address: 'Mankweng Rd, Polokwane',
+    open247: true,
+  },
+
+  // Free State
+  {
+    name: 'Pelonomi Tertiary Hospital',
+    type: 'hospital',
+    lat: -29.1224,
+    lng: 26.2173,
+    phone: '051 405 9111',
+    suburb: 'Bloemfontein',
+    address: 'Carnarvon St, Bloemfontein',
+    open247: true,
+  },
+
+  // North West
+  {
+    name: 'Wolmaransstad Hospital',
+    type: 'hospital',
+    lat: -27.0025,
+    lng: 25.5381,
+    phone: '018 398 2000',
+    suburb: 'Wolmaransstad',
+    address: 'Main Rd, Wolmaransstad',
+    open247: true,
+  },
 ];
+
+export const expandedEmergencyData = westernCapeServices;

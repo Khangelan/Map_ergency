@@ -1,21 +1,40 @@
 import React from 'react';
 import MapView from './components/MapView';
+import { expandedEmergencyData } from './assets/data/emergencyData';
+import './App.css';
 
 function App() {
+  const total = expandedEmergencyData.length;
+  const open247 = expandedEmergencyData.filter((s) => s.open247).length;
+
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <header style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <h1 style={{ color: '#d9534f', fontSize: '2.5rem', margin: '0 0 10px 0' }}>
-          🚨 Emergency Services Map
-        </h1>
-        <p style={{ color: '#555', margin: '0' }}>
-          Locate nearby medical, police, and fire response stations in real time.
-        </p>
+    <div className="app">
+      <header className="app-header">
+        <div className="header-inner">
+          <div className="brand">
+            <span className="brand-mark" aria-hidden="true">✚</span>
+            <div>
+              <h1>Cape Town Emergency Locator</h1>
+              <p>Find the nearest hospital, police station or fire response unit — fast.</p>
+            </div>
+          </div>
+
+          <div className="status-strip">
+            <span className="live-dot" aria-hidden="true"></span>
+            <span className="status-item"><strong>{total}</strong> services tracked</span>
+            <span className="status-divider">/</span>
+            <span className="status-item"><strong>{open247}</strong> open 24/7</span>
+          </div>
+        </div>
       </header>
-      
+
       <main>
         <MapView />
       </main>
+
+      <footer className="app-footer">
+        Demo data. In a real emergency, always dial your local emergency number first.
+      </footer>
     </div>
   );
 }
