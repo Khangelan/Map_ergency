@@ -179,6 +179,48 @@ main {
   font-size: 0.9rem;
 }
 
+/* Map controls */
+.map-controls-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.location-button,
+.map-style-toggle {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: 600 13px/1 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.location-button:hover,
+.map-style-toggle:hover {
+  border-color: var(--police);
+  color: var(--police);
+}
+
+.location-button {
+  background: #eff6ff;
+  color: var(--police);
+}
+
+.map-style-toggle.is-active {
+  background: var(--police);
+  border-color: var(--police);
+  color: #fff;
+}
+
+.location-status {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: -4px;
+}
+
 /* Filter bar */
 .filter-bar {
   display: flex;

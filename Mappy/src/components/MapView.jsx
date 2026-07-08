@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import FilterBar from './FilterBar';
 import { expandedEmergencyData } from '../assets/data/emergencyData';
@@ -27,12 +27,22 @@ function buildIcon(type) {
   });
 }
 
+function buildLocationIcon() {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: '<span class="marker-pin location-marker"><span class="marker-glyph">📍</span></span>',
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    popupAnchor: [0, -12],
+  });
+}
+
 // Flies the map to a service when it's selected from the list or a marker
-function FlyTo({ position }) {
+function FlyTo({ position, zoom = 15 }) {
   const map = useMap();
   useEffect(() => {
-    if (position) map.flyTo(position, 15, { duration: 1 });
-  }, [position, map]);
+    if (position) map.flyTo(position, zoom, { duration: 1 });
+  }, [position, zoom, map]);
   return null;
 }
 
@@ -60,9 +70,40 @@ function MapView() {
   const [services, setServices] = useState(expandedEmergencyData);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isLive, setIsLive] = useState(false);
+  const [mapStyle, setMapStyle] = useState('default');
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [locationStatus, setLocationStatus] = useState('idle');
+  const [locationError, setLocationError] = useState('');
 
   // Default center (rough Western Cape centre) — fitBounds will override on load
   const centerPosition = [-33.8, 19.0];
+
+  const requestLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus('unsupported');
+      setLocationError('Geolocation is not supported by this browser.');
+      return;
+    }
+
+    setLocationStatus('requesting');
+    setLocationError('');
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocation([position.coords.latitude, position.coords.longitude]);
+        setLocationStatus('granted');
+      },
+      (error) => {
+        setLocationStatus(error.code === 1 ? 'denied' : 'error');
+        setLocationError(error.message || 'Unable to access your location.');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  };
+
+  useEffect(() => {
+    requestLocation();
+  }, []);
 
   // Subscribe to Firestore 'services' collection for realtime updates, fallback to local data
   useEffect(() => {
@@ -133,6 +174,32 @@ function MapView() {
           )}
         </div>
 
+        <div className="map-controls-row">
+          <button
+            type="button"
+            className="location-button"
+            onClick={requestLocation}
+          >
+            📍 Use my location
+          </button>
+          <button
+            type="button"
+            className={`map-style-toggle ${mapStyle === 'satellite' ? 'is-active' : ''}`}
+            onClick={() => setMapStyle(mapStyle === 'satellite' ? 'default' : 'satellite')}
+            aria-pressed={mapStyle === 'satellite'}
+          >
+            {mapStyle === 'satellite' ? '🛰️ Satellite view' : '🗺️ Standard view'}
+          </button>
+        </div>
+
+        <div className="location-status">
+          {locationStatus === 'granted' && 'Your location is being shown on the map.'}
+          {locationStatus === 'requesting' && 'Requesting location permission…'}
+          {locationStatus === 'denied' && 'Location access was denied. You can enable it in your browser settings.'}
+          {locationStatus === 'unsupported' && 'Location access is not supported in this browser.'}
+          {locationStatus === 'error' && locationError}
+        </div>
+
         <FilterBar selectedType={selectedType} setSelectedType={setSelectedType} />
       </div>
 
@@ -192,14 +259,42 @@ function MapView() {
         <div className="map-frame">
           <MapContainer center={centerPosition} zoom={10} style={{ height: '100%', width: '100%' }}>
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              key={mapStyle}
+              attribution={
+                mapStyle === 'satellite'
+                  ? '&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+                  : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              }
+              url={
+                mapStyle === 'satellite'
+                  ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+                  : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+              }
             />
 
             {/* Fit the map to show all current filtered services */}
             <FitBounds services={filteredServices} />
 
             {activeService && <FlyTo position={[activeService.lat, activeService.lng]} />}
+            {currentLocation && <FlyTo position={currentLocation} zoom={14} />}
+
+            {currentLocation && (
+              <>
+                <Circle
+                  center={currentLocation}
+                  radius={90}
+                  pathOptions={{ color: '#2563eb', fillColor: '#60a5fa', fillOpacity: 0.2 }}
+                />
+                <Marker position={currentLocation} icon={buildLocationIcon()}>
+                  <Popup>
+                    <div className="popup-card">
+                      <h3 style={{ color: '#2563eb' }}>Your location</h3>
+                      <p>We’re using your current position to show nearby emergency services.</p>
+                    </div>
+                  </Popup>
+                </Marker>
+              </>
+            )}
 
             {filteredServices.map((service, index) => (
               <Marker
